@@ -98,11 +98,20 @@ export async function exportVideo(
     targetH = recipe.customHeight;
   } else {
     const preset = getPresetById(recipe.preset);
-    targetW = preset?.width ?? 1920;
-    targetH = preset?.height ?? 1080;
+    if (!preset) {
+      throw new Error(`Invalid preset: ${recipe.preset}`);
+    }
+    targetW = preset.width;
+    targetH = preset.height;
   }
 
-  // dimensions must be even for libx264
+  // dimensions must be even for libx264const data = await ffmpeg.readFile(webmOutput, undefined, { signal });
+if (!(data instanceof Uint8Array)) {
+  throw new Error("Failed to read output file");
+}const preset = getPresetById(recipe.preset);
+if (!preset) {
+  throw new Error(`Invalid preset: ${recipe.preset}`);
+}
   targetW = Math.round(targetW / 2) * 2;
   targetH = Math.round(targetH / 2) * 2;
 
@@ -163,7 +172,10 @@ export async function exportVideo(
     if (fallbackCode !== 0) throw new Error("Export failed");
 
     const data = await ffmpeg.readFile(webmOutput, undefined, { signal });
-    const blob = new Blob([new Uint8Array(data as Uint8Array)], { type: "video/webm" });
+    if (!(data instanceof Uint8Array)) {
+      throw new Error("Failed to read output file");
+    }
+    const blob = new Blob([data], { type: "video/webm" });
     await ffmpeg.deleteFile(inputName, { signal });
     await ffmpeg.deleteFile(webmOutput, { signal });
 
@@ -178,7 +190,10 @@ export async function exportVideo(
   }
 
   const data = await ffmpeg.readFile(outputName, undefined, { signal });
-  const blob = new Blob([new Uint8Array(data as Uint8Array)], { type: "video/mp4" });
+  if (!(data instanceof Uint8Array)) {
+    throw new Error("Failed to read output file");
+  }
+  const blob = new Blob([data], { type: "video/mp4" });
   await ffmpeg.deleteFile(inputName, { signal });
   await ffmpeg.deleteFile(outputName, { signal });
 
