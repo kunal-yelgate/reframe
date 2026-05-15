@@ -160,10 +160,10 @@ export default function VideoEditor() {
                 file && !isProcessing
                   ? "bg-film-600 hover:bg-film-700 hover:scale-[1.01] text-white shadow-lg shadow-film-200 active:scale-[0.98] cursor-pointer"
                   : "bg-[var(--border)] text-[var(--muted)] cursor-not-allowed",
-                file && status === "idle" && "motion-safe:animate-pulse"
+                file && status === "idle" && "motion-safe:animate-pulse motion-reduce:animate-none"
               )}
             >
-              <Zap size={20} className={cn(file && status === "idle" && "motion-safe:animate-pulse")} />
+              <Zap size={20} className={cn(file && status === "idle" && "motion-safe:animate-pulse motion-reduce:animate-none")} />
               {isProcessing ? "PROCESSING" : "EXPORT"}
             </button>
           </div>
