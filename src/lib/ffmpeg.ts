@@ -105,7 +105,7 @@ export async function exportVideo(
     targetH = preset.height;
   }
 
-  // dimensions must be even for libx264const data = await ffmpeg.readFile(webmOutput, undefined, { signal });
+  // the dimensions must be even for libx264const data = await ffmpeg.readFile(webmOutput, undefined, { signal });
 if (!(data instanceof Uint8Array)) {
   throw new Error("Failed to read output file");
 }const preset = getPresetById(recipe.preset);
