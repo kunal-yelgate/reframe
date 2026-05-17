@@ -63,11 +63,10 @@ function buildSessionId(): string {
 function buildVideoFilter(recipe: EditRecipe, targetW: number, targetH: number): string {
   const filters: string[] = [];
 
-  if (recipe.trimStart > 0 || recipe.trimEnd !== null) {
-    const end = recipe.trimEnd !== null ? recipe.trimEnd : 999999;
-    filters.push(`trim=start=${recipe.trimStart}:end=${end}`);
-    filters.push("setpts=PTS-STARTPTS");
-  }
+  if (recipe.speed !== 1) {
+  const pts = (1 / recipe.speed).toFixed(4);
+  filters.push(`setpts=${pts}*PTS`);
+}
 
   if (recipe.rotate === 90) {
     filters.push("transpose=1");
@@ -250,8 +249,13 @@ export async function exportVideo(
         throw new Error("Export failed");
       }
 
-      const data = await ffmpeg.readFile(fallbackOutputName, undefined, { signal });
-      const blob = new Blob([new Uint8Array(data as Uint8Array)], { type: "video/webm" });
+     const data = await ffmpeg.readFile(fallbackOutputName, undefined, { signal });
+
+if (!(data instanceof Uint8Array)) {
+  throw new Error("Failed to read fallback export output");
+}
+
+const blob = new Blob([data], { type: "video/webm" });
 
       onProgress(100);
       return {
@@ -264,7 +268,12 @@ export async function exportVideo(
     }
 
     const data = await ffmpeg.readFile(outputName, undefined, { signal });
-    const blob = new Blob([new Uint8Array(data as Uint8Array)], { type: mimeType });
+
+       if (!(data instanceof Uint8Array)) {
+           throw new Error("Failed to read export output");
+         }
+
+const blob = new Blob([data], { type: mimeType });
 
     onProgress(100);
     return {
