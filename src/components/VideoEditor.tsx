@@ -12,6 +12,7 @@ import FormatSelector from "./FormatSelector";
 import ExportSettings from "./ExportSettings";
 import ExportOverlay from "./ExportOverlay";
 import DownloadResult from "./DownloadResult";
+import ProgressStepper from "./ProgressStepper";
 import { cn } from "@/lib/utils";
 import {
   Layers, Crop, Scissors, RotateCw, Volume2,
@@ -79,6 +80,8 @@ export default function VideoEditor() {
             No login. No ads. 100% private — your video never leaves your device.
           </div>
         </header>
+
+        <ProgressStepper file={file} status={status} />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-5">
 
