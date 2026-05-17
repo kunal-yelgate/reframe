@@ -9,7 +9,7 @@ const CORE_BASE_URL =
 let ffmpegInstance: FFmpeg | null = null;
 
 export async function loadFFmpeg(signal?: AbortSignal): Promise<FFmpeg> {
-  if (ffmpegInstance?.loaded) return ffmpegInstance;
+  if (ffmpegInstance && ffmpegInstance.loaded) return ffmpegInstance;
 
   const ffmpeg = ffmpegInstance ?? new FFmpeg();
   ffmpegInstance = ffmpeg;
@@ -105,13 +105,7 @@ export async function exportVideo(
     targetH = preset.height;
   }
 
-  // the dimensions must be even for libx264const data = await ffmpeg.readFile(webmOutput, undefined, { signal });
-if (!(data instanceof Uint8Array)) {
-  throw new Error("Failed to read output file");
-}const preset = getPresetById(recipe.preset);
-if (!preset) {
-  throw new Error(`Invalid preset: ${recipe.preset}`);
-}
+  // dimensions must be even for libx264
   targetW = Math.round(targetW / 2) * 2;
   targetH = Math.round(targetH / 2) * 2;
 
