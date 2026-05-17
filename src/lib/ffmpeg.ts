@@ -185,7 +185,7 @@ export async function exportVideo(
     const audioTrim = buildAudioTrimFilter(recipe);
     const audioSpeed = buildAudioFilter(recipe.speed);
     const afParts = [audioTrim, audioSpeed].filter(Boolean);
-    const af = afParts.join(",");
+   const af = afParts.join(",");
 
     const args = ["-i", inputName];
     if (vf) args.push("-vf", vf);
